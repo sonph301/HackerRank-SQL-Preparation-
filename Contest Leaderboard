@@ -1,0 +1,20 @@
+Select temp1.hacker_id, temp1.name, sum(temp1.score) 
+from 
+(
+    select h.hacker_id, h.name, s.challenge_id, max(score) as score
+    from hackers h 
+    inner join submissions s
+    on h.hacker_id=s.hacker_id
+    group by h.hacker_id, h.name, s.challenge_id
+) as temp1
+where temp1.hacker_id not in
+(
+    select h.hacker_id
+    from hackers h 
+    inner join submissions s
+    on h.hacker_id=s.hacker_id
+    group by h.hacker_id
+    having sum(s.score)=0
+) 
+group by temp1.hacker_id, temp1.name
+order by sum(temp1.score)  DESC, temp1.hacker_id ASC;
