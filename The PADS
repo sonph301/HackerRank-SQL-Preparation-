@@ -1,0 +1,13 @@
+select case occupation
+when 'Doctor' then concat(name , '(D)')
+when 'Actor' then concat(name , '(A)')
+when 'Professor' then concat(name, '(P)')
+when 'Singer' then concat(name , '(S)')
+end
+from occupations
+order by name
+
+SELECT CONCAT('There are a total of ',COUNT(OCCUPATION),' ',LOWER(OCCUPATION),'s.')
+FROM OCCUPATIONS
+GROUP BY OCCUPATION
+ORDER BY COUNT(OCCUPATION),OCCUPATION;
