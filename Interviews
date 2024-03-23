@@ -1,0 +1,27 @@
+select con.contest_id, con.hacker_id, con.name,
+sum(sg.total_submissions), sum(sg.total_accepted_submissions), sum(vg.total_views), sum(vg.total_unique_views)
+from contests as con
+join colleges as col
+on con.contest_id=col.contest_id
+join challenges as chal
+on col.college_id = chal.college_id
+
+left join 
+(
+    select vs.challenge_id, sum(vs.total_views) as total_views, sum(vs.total_unique_views) as total_unique_views
+    from view_stats as vs
+    group by vs.challenge_id
+) as vg
+on vg.challenge_id=chal.challenge_id
+
+left join 
+(
+    select ss.challenge_id, sum(ss.total_submissions) as total_submissions, sum(ss.total_accepted_submissions) as total_accepted_submissions
+    from Submission_Stats as ss
+    group by ss.challenge_id
+) as sg
+on sg.challenge_id=chal.challenge_id
+
+group by con.contest_id, con.hacker_id, con.name
+having sum(sg.total_submissions) + sum(sg.total_accepted_submissions) + sum(vg.total_views) + sum(vg.total_unique_views)>0
+order by con.contest_id
