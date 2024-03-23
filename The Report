@@ -1,0 +1,9 @@
+update students
+set name=NULL
+where marks<70
+
+
+Select s.name,g.grade, s.marks from students as s
+inner join grades as g
+on s.marks between g.min_mark and g.max_mark
+order by g.grade DESC,  s.name ASC, s.marks ASC
